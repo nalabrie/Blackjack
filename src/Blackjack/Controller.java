@@ -1,6 +1,7 @@
 package Blackjack;
 
 import Blackjack.Exceptions.BetTooBigException;
+import Blackjack.Exceptions.DeckEmptyException;
 import Blackjack.Exceptions.InvalidBetException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +34,12 @@ public class Controller {
     @FXML
     private Label currentBetLabel;
 
+    @FXML
+    private Label dealerTotalLabel;
+
+    @FXML
+    private Label playerTotalLabel;
+
     // member variables for players and their wallets
 
     private Hand dealerHand = new Hand();
@@ -49,6 +56,23 @@ public class Controller {
         dealerMoneyLabel.setText("$" + String.valueOf(dealerWallet.getMoney()));
         playerMoneyLabel.setText("$" + String.valueOf(playerWallet.getMoney()));
         currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
+
+        // if the dealer's first card is an ace
+        if (dealerHand.cardValue(0) == 11) {
+            // set label to 11/1 to signify that the ace could be either 11 or 1
+            dealerTotalLabel.setText("11/1 + ??");
+        }
+        else {
+            // set label to the card value
+            dealerTotalLabel.setText(String.valueOf(dealerHand.cardValue(0)) + " + ??");
+        }
+
+        // do not show playerTotalLabel until a bet is made
+        playerTotalLabel.setText("N/A");
+
+        // disable hit and stay buttons until a bet is made
+        hitButton.setDisable(true);
+        stayButton.setDisable(true);
     }
 
     // event handlers for GUI elements
@@ -65,6 +89,18 @@ public class Controller {
             // disable button and text field until next round
             betButton.setDisable(true);
             betTextField.setDisable(true);
+
+            // enable hit and stay buttons
+            hitButton.setDisable(false);
+            stayButton.setDisable(false);
+
+            // update playerTotalLabel
+            playerTotalLabel.setText(String.valueOf(playerHand.sum()));
+
+            // if the dealer or player were dealt Blackjack
+            if (dealerHand.sum() == 21 || playerHand.sum() == 21) {
+                stayButton.fire();
+            }
         } catch (NumberFormatException | InvalidBetException e) {
             // invalid input (bet is not an integer or <= 0) so focus on the input error and try again
             betTextField.setText("Invalid bet");
@@ -80,12 +116,38 @@ public class Controller {
 
     @FXML
     private void hitPressed(ActionEvent event) {
-
+        try {
+            playerHand.hit();
+            playerTotalLabel.setText(String.valueOf(playerHand.sum()));
+            if (playerHand.sum() >= 21) {
+                stayButton.fire();
+            }
+        } catch (DeckEmptyException e) {
+            // TODO: 3/11/18 Handle this somehow
+            System.out.println("DECK EMPTY");
+        }
     }
 
     @FXML
     private void stayPressed(ActionEvent event) {
+        // disable all buttons and text fields until the round restarts
+        betTextField.setDisable(true);
+        betButton.setDisable(true);
+        hitButton.setDisable(true);
+        stayButton.setDisable(true);
 
+        // dealer hits repeatedly, stands on hard a 17
+        while (dealerHand.sum() < 17) {
+            dealerHand.hit();
+
+            // if dealer has a soft 17, hit again
+            if (dealerHand.sum() == 17 && dealerHand.hasAce()) {
+                dealerHand.hit();
+            }
+        }
+
+        // update dealerTotalLabel
+        dealerTotalLabel.setText(String.valueOf(dealerHand.sum()));
     }
 
 }

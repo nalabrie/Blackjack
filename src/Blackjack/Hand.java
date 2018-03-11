@@ -85,7 +85,7 @@ public class Hand {
      * @param index Index of the card in the hand array to get the value of.
      * @return The value of the card.
      */
-    private int cardValue(int index) {
+    public int cardValue(int index) {
         switch (hand[index]) {
             case "A":
                 return 11;
@@ -138,6 +138,21 @@ public class Hand {
      */
     public int getSize() {
         return size;
+    }
+
+    /**
+     * Check if there's an Ace in the hand.
+     *
+     * @return True if there's an ace, false if there aren't any aces.
+     */
+    public boolean hasAce() {
+        for (int i = 0; i < size; i++) {
+            if (hand[i].equals("A")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // TODO: 2/15/18 remove when finished debugging
