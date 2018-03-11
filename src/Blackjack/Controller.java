@@ -46,9 +46,9 @@ public class Controller {
 
         // set all labels to their starting values
 
-        dealerMoneyLabel.setText(String.valueOf(dealerWallet.getMoney()));
-        playerMoneyLabel.setText(String.valueOf(playerWallet.getMoney()));
-        currentBetLabel.setText(String.valueOf(playerWallet.getBet()));
+        dealerMoneyLabel.setText("$" + String.valueOf(dealerWallet.getMoney()));
+        playerMoneyLabel.setText("$" + String.valueOf(playerWallet.getMoney()));
+        currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
     }
 
     // event handlers for GUI elements
@@ -60,7 +60,7 @@ public class Controller {
             playerWallet.setBet(Integer.parseInt(betTextField.getText()));
 
             // update currentBetLabel
-            currentBetLabel.setText(String.valueOf(playerWallet.getBet()));
+            currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
 
             // disable button and text field until next round
             betButton.setDisable(true);
