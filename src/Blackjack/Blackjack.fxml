@@ -53,14 +53,14 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <ButtonBar layoutX="426.0" layoutY="397.0" prefHeight="40.0" prefWidth="200.0">
+            <ButtonBar layoutX="433.0" layoutY="411.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="7.0">
               <buttons>
                 <Button fx:id="hitButton" mnemonicParsing="false" onAction="#hitPressed" text="Hit" />
                   <Button fx:id="stayButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#stayPressed" text="Stay" />
               </buttons>
             </ButtonBar>
-            <TextField fx:id="betTextField" layoutX="14.0" layoutY="404.0" prefHeight="27.0" prefWidth="76.0" promptText="Enter bet" />
-            <Button fx:id="betButton" layoutX="97.0" layoutY="404.0" mnemonicParsing="false" onAction="#betPressed" text="Bet" />
+            <TextField fx:id="betTextField" layoutX="14.0" layoutY="418.0" prefHeight="27.0" prefWidth="76.0" promptText="Enter bet" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="7.0" />
+            <Button fx:id="betButton" layoutX="90.0" layoutY="418.0" mnemonicParsing="false" onAction="#betPressed" text="Bet" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="90.0" />
       </children>
     </AnchorPane>
   </children>

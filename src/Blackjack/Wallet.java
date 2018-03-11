@@ -1,5 +1,6 @@
 package Blackjack;
 
+import Blackjack.Exceptions.BetTooBigException;
 import Blackjack.Exceptions.InvalidBetException;
 import Blackjack.Exceptions.NegativeMoneyException;
 
@@ -14,6 +15,7 @@ public class Wallet {
      * Constructor that takes input value to set money in wallet.
      *
      * @param money Amount of money to start with in wallet.
+     * @throws NegativeMoneyException When starting money is less than 0.
      */
     public Wallet(int money) {
         if (money >= 0) {
@@ -39,10 +41,16 @@ public class Wallet {
      * Adds to the player's current bet.
      *
      * @param bet Amount to be added to existing bet.
+     * @throws InvalidBetException When bet is less than 1.
+     * @throws BetTooBigException  When the bet exceeds amount of money available.
      */
     public void setBet(int bet) {
         if (bet < 1) {
             throw new InvalidBetException();
+        }
+
+        if (bet > money) {
+            throw new BetTooBigException();
         }
 
         this.bet += bet;

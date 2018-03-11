@@ -33,6 +33,7 @@ public class Hand {
      * Constructor that takes a hand size and draws that many cards.
      *
      * @param size The size of the hand to start with.
+     * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck,
      */
     public Hand(int size) {
         // TODO: 3/4/18 Consider generating deck before constructor is called
@@ -65,6 +66,7 @@ public class Hand {
      * Draws card and safely increments deckPos.
      *
      * @return The card to be drawn.
+     * @throws DeckEmptyException When the deck is empty and cannot draw anymore.
      */
     private String draw() {
         if (deckPos < deck.getSize()) {
