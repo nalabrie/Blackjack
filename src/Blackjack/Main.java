@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main method which starts up the Blackjack GUI application.
+ */
 public class Main extends Application {
 
     @Override

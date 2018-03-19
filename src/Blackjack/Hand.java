@@ -1,9 +1,6 @@
 package Blackjack;
 
-import Blackjack.Exceptions.DeckEmptyException;
 import Blackjack.Exceptions.HandBiggerThanDeckException;
-
-import java.util.Arrays;
 
 /**
  * Class that simulates a player's hand of cards during a card game.
@@ -63,20 +60,18 @@ public class Hand {
     }
 
     /**
-     * Draws card and safely increments deckPos.
+     * Draws card and safely increments deckPos. Also creates a new deck when the one being drawn from is empty.
      *
      * @return The card to be drawn.
-     * @throws DeckEmptyException When the deck is empty and cannot draw anymore.
      */
     private String draw() {
-        if (deckPos < deck.getSize()) {
-            return deck.getDeck()[deckPos++];
+        if (deckPos >= deck.getSize()) {
+            // deck is empty, create a new shuffled deck to draw from
+            deck = new Deck();
+            deckPos = 0;
         }
 
-        else {
-            // TODO: 3/4/18 Consider handling automatically rather than throwing an exception
-            throw new DeckEmptyException();
-        }
+        return deck.getDeck()[deckPos++];
     }
 
     /**
@@ -155,11 +150,22 @@ public class Hand {
         return false;
     }
 
-    // TODO: 2/15/18 remove when finished debugging
-    @Override
-    public String toString() {
-        return "Hand{" +
-                "hand=" + Arrays.toString(hand) +
-                '}';
+    /**
+     * Get the hand as a comma separated string of card faces.
+     *
+     * @return Comma separated string of card faces.
+     */
+    public String getHandAsString() {
+        String result = "";
+        for (int i = 0; i < size; i++) {
+            result += hand[i];
+
+            // only add a comma if not the last element in the list
+            if (i != size - 1) {
+                result += ", ";
+            }
+        }
+
+        return result;
     }
 }
