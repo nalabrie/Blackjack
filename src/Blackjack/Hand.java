@@ -30,7 +30,7 @@ public class Hand {
      * Constructor that takes a hand size and draws that many cards.
      *
      * @param size The size of the hand to start with.
-     * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck,
+     * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck.
      */
     public Hand(int size) {
         // TODO: 3/4/18 Consider generating deck before constructor is called
@@ -54,6 +54,8 @@ public class Hand {
 
     /**
      * Default constructor which draws 2 cards (default starting Blackjack hand).
+     *
+     * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck.
      */
     public Hand() {
         this(2);
