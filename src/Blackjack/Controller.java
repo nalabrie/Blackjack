@@ -137,7 +137,13 @@ public class Controller {
         // disable hit and stay buttons until a bet is made
         hitButton.setDisable(true);
         stayButton.setDisable(true);
+
+        // do not show 'new game' and 'deal' buttons until thr round is over
+        newGameButton.setVisible(false);
+        dealButton.setVisible(false);
     }
+
+    // TODO: 3/19/18 add documentation for all buttons
 
     // event handlers for GUI elements
 
@@ -180,21 +186,18 @@ public class Controller {
 
     @FXML
     private void hitPressed(ActionEvent event) {
-        // only allow hitting if the player's hand is 9 cards or less (this shouldn't happen anyway, but just in case)
-        // TODO: 3/19/18 consider removing this check if another method doesn't make this unsafe
-        if (playerHand.getSize() <= 9) {
-            playerHand.hit();
-            playerTotalLabel.setText(String.valueOf(playerHand.sum()));
+        // only allow hitting if the player's hand is 12 cards or less (this shouldn't happen anyway, but just in case)
+        playerHand.hit();
+        playerTotalLabel.setText(String.valueOf(playerHand.sum()));
 
-            // check if the player has busted or has Blackjack and 'stay'
-            if (playerHand.sum() >= 21) {
-                stayButton.fire();
-            }
+        // check if the player has busted or has Blackjack and 'stay'
+        if (playerHand.sum() >= 21) {
+            stayButton.fire();
+        }
 
-            // disable the hit button once the player has 9 cards
-            if (playerHand.getSize() >= 9) {
-                hitButton.setDisable(true);
-            }
+        // disable the hit button once the player has 12 cards
+        if (playerHand.getSize() >= 12) {
+            hitButton.setDisable(true);
         }
     }
 
@@ -225,4 +228,11 @@ public class Controller {
         // TODO: 3/19/18 handle running out of money
     }
 
+    @FXML
+    private void newGamePressed(ActionEvent event) {
+    }
+
+    @FXML
+    private void dealPressed(ActionEvent event) {
+    }
 }

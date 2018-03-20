@@ -57,8 +57,8 @@
                   <Label fx:id="playerTotalLabel" text="NA" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
-            <Label layoutX="30.0" layoutY="14.0" text="Dealer's Hand" />
-            <Label layoutX="519.0" layoutY="14.0" text="Player's Hand" />
+            <Label layoutX="277.0" layoutY="14.0" text="Dealer's Hand" />
+            <Label layoutX="278.0" layoutY="196.0" text="Player's Hand" />
             <GridPane alignment="CENTER" hgap="10.0" layoutX="220.0" layoutY="445.0" minHeight="30.0" minWidth="200.0" prefHeight="30.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
               <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
@@ -68,8 +68,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" text="New Game" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" text="Deal" GridPane.columnIndex="1" />
+                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGamePressed" text="New Game" />
+                  <Button fx:id="dealButton" mnemonicParsing="false" onAction="#dealPressed" prefHeight="27.0" prefWidth="85.0" text="Deal" GridPane.columnIndex="1" />
                </children>
             </GridPane>
       </children>
