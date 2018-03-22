@@ -3,6 +3,9 @@ package Blackjack;
 import Blackjack.Exceptions.InvalidCardValueException;
 import Blackjack.Exceptions.InvalidSuitException;
 
+/**
+ * Class that simulates a playing card.
+ */
 public class Card {
 
     /**
@@ -43,6 +46,7 @@ public class Card {
 
     /**
      * Get the value of the card.
+     *
      * @return The card value.
      */
     public int getValue() {
@@ -51,6 +55,7 @@ public class Card {
 
     /**
      * Set the value of the card by its symbol (using Blackjack rules).
+     *
      * @param symbol The symbol of the card (3, 10, J, K, etc).
      */
     private void setValue(String symbol) {
@@ -71,12 +76,19 @@ public class Card {
 
     /**
      * Get the symbol of the card.
+     *
      * @return The card's symbol.
      */
     public String getSymbol() {
         return symbol;
     }
 
+    /**
+     * Sets the symbol of the card based on its value.
+     *
+     * @param value Integer ranging from 1 to 14. 1 and 14 are both aces.
+     * @throws InvalidCardValueException When the value parameter isn't between 1 and 14 (inclusive).
+     */
     private void setSymbol(int value) {
         // check for valid input
         if (value < 1 || value > 14) {
@@ -105,6 +117,7 @@ public class Card {
 
     /**
      * Get the suit of the card.
+     *
      * @return The suit of the card.
      */
     public String getSuit() {
@@ -113,6 +126,7 @@ public class Card {
 
     /**
      * Set the suit of the card.
+     *
      * @param suit The suit to assign the card. Suit must be spades, hearts, clubs, or diamonds.
      * @throws InvalidSuitException When the suit isn't one of the following: spades, hearts, clubs, or diamonds.
      */

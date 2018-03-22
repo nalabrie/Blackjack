@@ -1,57 +1,70 @@
 package Blackjack;
 
+import Blackjack.Exceptions.DeckEmptyException;
+
 import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Class that simulates a deck of cards.
+ * Class that simulates a deck of playing cards.
  */
 public class Deck {
     /**
-     * The deck of cards, initially not shuffled.
+     * Array of Card objects that make up the deck.
      */
-    private String[] deck = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", "3", "4",
-            "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J",
-            "Q", "K", "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+    private Card[] deck = new Card[52];
 
     /**
-     * Constructor that creates a shuffled deck of cards.
+     * Current position in the deck to draw from.
+     */
+    private int currentPos;
+
+    /**
+     * Constructor that creates a shuffled deck of 52 cards.
      */
     public Deck() {
-        shuffleDeck();
-    }
+        // populate deck array with an non-shuffled deck of cards
+        for (int i = 0; i < deck.length; i++) {
+            if (i < 13) {
+                deck[i] = new Card(i + 1, "spades");
+            }
 
-    /**
-     * Randomly shuffles the deck.
-     */
-    private void shuffleDeck() {
+            else if (i < 26) {
+                deck[i] = new Card(i + 1, "hearts");
+            }
+
+            else if (i < 39) {
+                deck[i] = new Card(i + 1, "clubs");
+            }
+
+            else {
+                deck[i] = new Card(i + 1, "diamonds");
+            }
+        }
+
+        // shuffle the deck
         Collections.shuffle(Arrays.asList(deck));
+
+        // set the current position in the deck to the beginning
+        currentPos = 0;
     }
 
-    /**
-     * Get the entire deck as an array.
-     *
-     * @return An array of the deck.
-     */
-    public String[] getDeck() {
-        return deck;
+    public Card draw() {
+        // check if the deck is empty
+        if (currentPos >= deck.length) {
+            throw new DeckEmptyException();
+        }
+
+        // return the next card THEN increment the current position
+        return deck[currentPos++];
     }
 
-    /**
-     * Gets the entire deck as a String.
-     *
-     * @return A String of the deck.
-     */
-    public String printDeck() {
-        return Arrays.toString(deck);
-    }
-
-    /**
-     * Get the size of the deck.
-     *
-     * @return How many cards are in the deck.
-     */
-    public int getSize() {
-        return deck.length;
+    // TODO: 3/20/18 test class, remove when finished
+    @Override
+    public String toString() {
+        return "Deck{" +
+                "deck=" + Arrays.toString(deck) +
+                ", currentPos=" + currentPos +
+                '}';
     }
 }
