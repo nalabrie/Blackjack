@@ -8,7 +8,14 @@ import Blackjack.Exceptions.NegativeMoneyException;
  * Class that simulates a player's wallet for betting.
  */
 public class Wallet {
+    /**
+     * The amount of money in the wallet.
+     */
     private int money;
+
+    /**
+     * The current amount set as a bet. This amount is added to 'money' if a bet is won or taken away otherwise.
+     */
     private int bet;
 
     /**
@@ -18,6 +25,7 @@ public class Wallet {
      * @throws NegativeMoneyException When starting money is less than 0.
      */
     public Wallet(int money) {
+        // check for valid input
         if (money >= 0) {
             this.money = money;
         }
@@ -77,10 +85,10 @@ public class Wallet {
     /**
      * Method that adds or removes money from wallet depending on if a bet was won.
      *
-     * @param hasWon Wins bet if true, loses bet if false.
+     * @param winner Wins bet if true, loses bet if false.
      */
-    public void hasWonBet(boolean hasWon) {
-        if (hasWon) {
+    public void hasWonBet(boolean winner) {
+        if (winner) {
             money += bet;
         }
 
@@ -90,5 +98,14 @@ public class Wallet {
 
         // reset bet
         bet = 0;
+    }
+
+    /**
+     * Add money to the wallet.
+     *
+     * @param amount How much money to add to the wallet.
+     */
+    public void addMoney(int amount) {
+        money += amount;
     }
 }

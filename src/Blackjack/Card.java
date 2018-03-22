@@ -54,7 +54,7 @@ public class Card {
     }
 
     /**
-     * Set the value of the card by its symbol (using Blackjack rules).
+     * Set the value of the card by its symbol (using Blackjack rules (aces are always 11, face cards are always 10)).
      *
      * @param symbol The symbol of the card (3, 10, J, K, etc).
      */
@@ -140,5 +140,15 @@ public class Card {
         else {
             throw new InvalidSuitException();
         }
+    }
+
+    // TODO: 3/21/18 remove when finished
+    @Override
+    public String toString() {
+        return "Card{" +
+                "value=" + value +
+                ", symbol='" + symbol + '\'' +
+                ", suit='" + suit + '\'' +
+                '}';
     }
 }

@@ -26,19 +26,19 @@ public class Deck {
         // populate deck array with an non-shuffled deck of cards
         for (int i = 0; i < deck.length; i++) {
             if (i < 13) {
-                deck[i] = new Card(i + 1, "spades");
+                deck[i] = new Card(i % 13 + 1, "spades");
             }
 
             else if (i < 26) {
-                deck[i] = new Card(i + 1, "hearts");
+                deck[i] = new Card(i % 13 + 1, "hearts");
             }
 
             else if (i < 39) {
-                deck[i] = new Card(i + 1, "clubs");
+                deck[i] = new Card(i % 13 + 1, "clubs");
             }
 
             else {
-                deck[i] = new Card(i + 1, "diamonds");
+                deck[i] = new Card(i % 13 + 1, "diamonds");
             }
         }
 
@@ -49,6 +49,12 @@ public class Deck {
         currentPos = 0;
     }
 
+    /**
+     * Draw a single card from the front of the deck.
+     *
+     * @return A Card object from the front of the deck.
+     * @throws DeckEmptyException When the deck is empty and can't be drawn from anymore.
+     */
     public Card draw() {
         // check if the deck is empty
         if (currentPos >= deck.length) {
@@ -57,6 +63,15 @@ public class Deck {
 
         // return the next card THEN increment the current position
         return deck[currentPos++];
+    }
+
+    /**
+     * Get how many cards are in the deck.
+     *
+     * @return The size of the deck as an integer.
+     */
+    public int getSize() {
+        return deck.length;
     }
 
     // TODO: 3/20/18 test class, remove when finished

@@ -1,16 +1,16 @@
 package Blackjack;
 
+import Blackjack.Exceptions.DeckEmptyException;
 import Blackjack.Exceptions.HandBiggerThanDeckException;
+import Blackjack.Exceptions.HandFullException;
+import Blackjack.Exceptions.HandIndexOutOfBoundsException;
+
+import java.util.Arrays;
 
 /**
  * Class that simulates a player's hand of cards during a card game.
  */
 public class Hand {
-    /**
-     * Current position to draw from in the deck. Increments with each draw.
-     */
-    private static int deckPos = 0;
-
     /**
      * Shuffled deck which all hands draw from.
      */
@@ -19,7 +19,7 @@ public class Hand {
     /**
      * Array which stores the hand of cards.
      */
-    private String[] hand;
+    private Card[] hand;
 
     /**
      * How many cards are in the hand.
@@ -27,28 +27,39 @@ public class Hand {
     private int size;
 
     /**
-     * Constructor that takes a hand size and draws that many cards.
+     * Constructor that takes a hand size and draws that many cards into the hand.
      *
      * @param size The size of the hand to start with.
      * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck.
      */
     public Hand(int size) {
-        // TODO: 3/4/18 Consider generating deck before constructor is called
+        // create a new shuffled deck if one isn't created yet
         if (deck == null) {
             deck = new Deck();
         }
 
-        // hand can be as big as the deck
-        hand = new String[deck.getSize()];
-
-        if (size > hand.length) {
+        // hand cannot be bigger than deck
+        if (size > deck.getSize()) {
             throw new HandBiggerThanDeckException();
         }
 
+        // hand can be as big as the deck
+        hand = new Card[deck.getSize()];
+
+        // draw cards into hand
         for (int i = 0; i < size; i++) {
-            hand[i] = draw();
+            try {
+                hand[i] = deck.draw();
+            } catch (DeckEmptyException e) {
+                // deck is empty, create new deck
+                deck = new Deck();
+
+                // finish drawing
+                hand[i] = deck.draw();
+            }
         }
 
+        // save initial size of hand
         this.size = size;
     }
 
@@ -62,52 +73,21 @@ public class Hand {
     }
 
     /**
-     * Draws card and safely increments deckPos. Also creates a new deck when the one being drawn from is empty.
-     *
-     * @return The card to be drawn.
-     */
-    private String draw() {
-        if (deckPos >= deck.getSize()) {
-            // deck is empty, create a new shuffled deck to draw from
-            deck = new Deck();
-            deckPos = 0;
-        }
-
-        return deck.getDeck()[deckPos++];
-    }
-
-    /**
-     * Gets the value of a single card in the hand, aces are always 11, face cards are always 10.
-     *
-     * @param index Index of the card in the hand array to get the value of.
-     * @return The value of the card.
-     */
-    public int cardValue(int index) {
-        switch (hand[index]) {
-            case "A":
-                return 11;
-            case "J":
-            case "Q":
-            case "K":
-                return 10;
-            default:
-                return Integer.parseInt(hand[index]);
-        }
-    }
-
-    /**
      * Sums up the hand using Blackjack rules for counting.
      *
      * @return The sum of the hand.
      */
     public int sum() {
+        // track total of cards in hand
         int result = 0;
 
         // keep track of aces for subtracting later if sum goes above 21
         int aceCount = 0;
+
+        // sum hand and count aces in hand
         for (int i = 0; i < size; i++) {
-            result += cardValue(i);
-            if (cardValue(i) == 11) {
+            result += hand[i].getValue();
+            if (hand[i].getSymbol().equals("A")) {
                 aceCount++;
             }
         }
@@ -122,10 +102,29 @@ public class Hand {
     }
 
     /**
-     * Add a single card to the hand.
+     * Add a single card to the hand from the deck.
+     *
+     * @throws HandFullException When the hand is already full and a hit cannot be completed.
      */
     public void hit() {
-        hand[size++] = draw();
+        // check if there's room in the hand to hit
+        if (size >= deck.getSize()) {
+            throw new HandFullException();
+        }
+
+        // draw a card
+        try {
+            hand[size] = deck.draw();
+        } catch (DeckEmptyException e) {
+            // deck is empty, create new deck
+            deck = new Deck();
+
+            // finish drawing
+            hand[size] = deck.draw();
+        }
+
+        // increment size
+        size++;
     }
 
     /**
@@ -138,13 +137,29 @@ public class Hand {
     }
 
     /**
+     * Get a card from the hand by its index.
+     *
+     * @param index The index of the card to be returned, starting at 0.
+     * @return The card object at the given index.
+     * @throws HandIndexOutOfBoundsException When the index is below 0 or greater than hand size - 1.
+     */
+    public Card getCard(int index) {
+        // check the index is in the bounds of the hand
+        if (index < 0 || index >= size) {
+            throw new HandIndexOutOfBoundsException();
+        }
+
+        return hand[index];
+    }
+
+    /**
      * Check if there's an Ace in the hand.
      *
      * @return True if there's an ace, false if there aren't any aces.
      */
     public boolean hasAce() {
         for (int i = 0; i < size; i++) {
-            if (hand[i].equals("A")) {
+            if (hand[i].getSymbol().equals("A")) {
                 return true;
             }
         }
@@ -152,22 +167,12 @@ public class Hand {
         return false;
     }
 
-    /**
-     * Get the hand as a comma separated string of card faces.
-     *
-     * @return Comma separated string of card faces.
-     */
-    public String getHandAsString() {
-        String result = "";
-        for (int i = 0; i < size; i++) {
-            result += hand[i];
-
-            // only add a comma if not the last element in the list
-            if (i != size - 1) {
-                result += ", ";
-            }
-        }
-
-        return result;
+    // TODO: 3/21/18 remove when finished
+    @Override
+    public String toString() {
+        return "Hand{" +
+                "hand=" + Arrays.toString(hand) +
+                ", size=" + size +
+                '}';
     }
 }

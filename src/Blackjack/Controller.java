@@ -122,13 +122,13 @@ public class Controller {
         currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
 
         // if the dealer's first card is an ace
-        if (dealerHand.cardValue(0) == 11) {
+        if (dealerHand.getCard(0).getSymbol().equals("A")) {
             // set label to 11/1 to signify that the ace could be either 11 or 1
             dealerTotalLabel.setText("11/1 + ??");
         }
         else {
             // set label to the card value
-            dealerTotalLabel.setText(String.valueOf(dealerHand.cardValue(0)) + " + ??");
+            dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(0).getValue()) + " + ??");
         }
 
         // do not show playerTotalLabel until a bet is made
