@@ -83,7 +83,7 @@ public class Wallet {
     }
 
     /**
-     * Method that adds or removes money from wallet depending on if a bet was won.
+     * Method that adds or removes the bet from wallet depending on if a bet was won.
      *
      * @param winner Wins bet if true, loses bet if false.
      */
@@ -100,6 +100,20 @@ public class Wallet {
         bet = 0;
     }
 
+    /**
+     * Method that adds or removes 150% of the bet from wallet depending on if a bet was won.
+     *
+     * @param winner Wins bet if true, loses bet if false.
+     */
+    public void hasWonBetWithBlackjack(boolean winner) {
+        // change 'bet' to 150% of the original 'bet', using normal rounding
+        bet = (int) Math.round(bet * 1.5);
+
+        // run the normal hasWonBet method with the new 'bet' amount
+        hasWonBet(winner);
+    }
+
+    // TODO: 3/23/18 may not be needed, check when finished
     /**
      * Add money to the wallet.
      *

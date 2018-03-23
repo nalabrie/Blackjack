@@ -73,7 +73,7 @@
                   <Button fx:id="dealButton" mnemonicParsing="false" onAction="#dealPressed" prefHeight="27.0" prefWidth="85.0" text="Deal" GridPane.columnIndex="1" />
                </children>
             </GridPane>
-            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="220.0" layoutY="414.0" prefHeight="26.0" prefWidth="200.0" text="Label" textAlignment="CENTER" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
+            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="220.0" layoutY="417.0" prefHeight="26.0" prefWidth="200.0" text="Label" textAlignment="CENTER" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
                <font>
                   <Font size="20.0" />
                </font>

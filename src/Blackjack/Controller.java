@@ -109,6 +109,8 @@ public class Controller {
      */
     private Wallet playerWallet;
 
+    // initialize the state of the game
+
     /**
      * Sets the starting state of the game when the application is opened. This is called once automatically.
      */
@@ -118,7 +120,7 @@ public class Controller {
 
         dealerHand = new Hand();
         playerHand = new Hand();
-        dealerWallet = new Wallet();
+        dealerWallet = new Wallet(1000);    // dealer starts with extra money
         playerWallet = new Wallet();
 
         // set all labels to their starting values
@@ -127,18 +129,8 @@ public class Controller {
         playerMoneyLabel.setText("$" + String.valueOf(playerWallet.getMoney()));
         currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
 
-        // if the dealer's first card is an ace
-        if (dealerHand.getCard(0).getSymbol().equals("A")) {
-            // set label to 11/1 to signify that the ace could be either 11 or 1
-            dealerTotalLabel.setText("11/1 + ??");
-        }
-        else {
-            // set label to the card value
-            dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(0).getValue()) + " + ??");
-        }
-
-        // TODO: 3/23/18 check how real Blackjack works
-        // do not show playerTotalLabel until a bet is made
+        // do not show either dealer or player totals until a bet is made
+        dealerTotalLabel.setText("N/A");
         playerTotalLabel.setText("N/A");
 
         // disable hit and stay buttons until a bet is made
@@ -162,13 +154,25 @@ public class Controller {
             // update currentBetLabel
             currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
 
-            // disable button and text field until next round
+            // disable bet button and text field until next round
             betButton.setDisable(true);
             betTextField.setDisable(true);
 
             // enable hit and stay buttons
             hitButton.setDisable(false);
             stayButton.setDisable(false);
+
+            // update dealerTotalLabel to show the value of their first card
+
+            // if the dealer's first card is an ace
+            if (dealerHand.getCard(0).getSymbol().equals("A")) {
+                // set label to 11/1 to signify that the ace could be either 11 or 1
+                dealerTotalLabel.setText("11/1 + ??");
+            }
+            else {
+                // set label to the card value
+                dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(0).getValue()) + " + ??");
+            }
 
             // update playerTotalLabel
             playerTotalLabel.setText(String.valueOf(playerHand.sum()));
@@ -230,10 +234,13 @@ public class Controller {
         // update dealerTotalLabel
         dealerTotalLabel.setText(String.valueOf(dealerHand.sum()));
 
+        // check for winner
+
         // TODO: 3/19/18 handle bets
         // TODO: 3/19/18 implement a reset button to move to the next round
         // TODO: 3/19/18 implement a new game button that possibly calls the initialize() method (don't forget to force a new deck)
         // TODO: 3/19/18 handle running out of money
+        // TODO: 3/23/18 finish documentation of methods
     }
 
     @FXML
@@ -243,4 +250,7 @@ public class Controller {
     @FXML
     private void dealPressed(ActionEvent event) {
     }
+
+    // TODO: 3/23/18 remove section if nothing gets added to it
+    // methods to handle game logic
 }
