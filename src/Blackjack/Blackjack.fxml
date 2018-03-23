@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Blackjack.Controller">
   <children>
@@ -72,6 +73,11 @@
                   <Button fx:id="dealButton" mnemonicParsing="false" onAction="#dealPressed" prefHeight="27.0" prefWidth="85.0" text="Deal" GridPane.columnIndex="1" />
                </children>
             </GridPane>
+            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="220.0" layoutY="414.0" prefHeight="26.0" prefWidth="200.0" text="Label" textAlignment="CENTER" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
       </children>
     </AnchorPane>
   </children>

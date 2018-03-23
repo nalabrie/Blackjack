@@ -81,6 +81,12 @@ public class Controller {
     @FXML
     private Button dealButton;
 
+    /**
+     * Label that displays the winner at the end of each round.
+     */
+    @FXML
+    private Label winnerLabel;
+
     // member variables for players and their wallets
 
     /**
@@ -131,6 +137,7 @@ public class Controller {
             dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(0).getValue()) + " + ??");
         }
 
+        // TODO: 3/23/18 check how real Blackjack works
         // do not show playerTotalLabel until a bet is made
         playerTotalLabel.setText("N/A");
 
@@ -138,12 +145,11 @@ public class Controller {
         hitButton.setDisable(true);
         stayButton.setDisable(true);
 
-        // do not show 'new game' and 'deal' buttons until thr round is over
+        // do not show 'new game', 'winnerLabel', and 'deal' buttons until thr round is over
+        winnerLabel.setVisible(false);
         newGameButton.setVisible(false);
         dealButton.setVisible(false);
     }
-
-    // TODO: 3/19/18 add documentation for all buttons
 
     // event handlers for GUI elements
 
@@ -186,8 +192,10 @@ public class Controller {
 
     @FXML
     private void hitPressed(ActionEvent event) {
-        // only allow hitting if the player's hand is 12 cards or less (this shouldn't happen anyway, but just in case)
+        // hit player
         playerHand.hit();
+
+        // update player's total
         playerTotalLabel.setText(String.valueOf(playerHand.sum()));
 
         // check if the player has busted or has Blackjack and 'stay'
