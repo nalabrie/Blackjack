@@ -240,6 +240,10 @@ public class Controller {
 
         // handle bets
 
+        // if player wins with Blackjack
+        if (winner.equals("player blackjack")) {
+        }
+
         // if dealer wins
         if (winner.equals("dealer")) {
         }
@@ -269,18 +273,31 @@ public class Controller {
     private void nextRoundPressed(ActionEvent event) {
     }
 
-    // TODO: 3/23/18 remove section if nothing gets added to it
     // methods to handle game logic
 
     /**
      * Figure out who won and if there's a tie.
      *
-     * @return String of the result: 'player', 'dealer', or 'tie'.
+     * @return String of the winner. Returns one of the following: 'player blackjack', 'player', 'dealer', or 'tie'.
      */
     private String getWinner() {
         // to avoid calling 'sum' method many times, store sums as local variables (more efficient)
         int dealerSum = dealerHand.sum();
         int playerSum = playerHand.sum();
+
+        // check if dealer and player have Blackjack (2 cards valued at 21)
+        boolean dealerHasBlackjack = dealerHand.getSize() == 2 && dealerSum == 21;
+        boolean playerHasBlackjack = playerHand.getSize() == 2 && playerSum == 21;
+
+        // dealer has Blackjack and player does not
+        if (dealerHasBlackjack && !playerHasBlackjack) {
+            return "dealer";
+        }
+
+        // player has Blackjack and dealer does not
+        if (playerHasBlackjack && !dealerHasBlackjack) {
+            return "player blackjack";
+        }
 
         // dealer busts
         if (dealerSum > 21) {
@@ -302,22 +319,12 @@ public class Controller {
             return "player";
         }
 
-        // tie must have occurred at this point
-
-        // if both dealer and player have 21 then a Blackjack hand (2 cards valued at 21) wins, otherwise it's a tie
-        if (playerSum == 21 && dealerSum == 21) {
-            // player has Blackjack, dealer does not
-            if (playerHand.getSize() == 2 && dealerHand.getSize() != 2) {
-                return "player";
-            }
-
-            // dealer has Blackjack, player does not
-            if (dealerHand.getSize() == 2 && playerHand.getSize() != 2) {
-                return "dealer";
-            }
+        if (playerSum == dealerSum) {
+            return "tie";
         }
 
-        // since no one has Blackjack and both hands aren't bigger than the other, a normal tie must have occurred
-        return "tie";
+        // TODO: 3/23/18 handle differently because this is bad design
+        // should never get this far
+        return "ERROR";
     }
 }
