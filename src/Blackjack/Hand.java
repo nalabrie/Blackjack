@@ -166,13 +166,4 @@ public class Hand {
 
         return false;
     }
-
-    // TODO: 3/21/18 remove when finished
-    @Override
-    public String toString() {
-        return "Hand{" +
-                "hand=" + Arrays.toString(hand) +
-                ", size=" + size +
-                '}';
-    }
 }

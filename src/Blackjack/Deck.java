@@ -73,13 +73,4 @@ public class Deck {
     public int getSize() {
         return deck.length;
     }
-
-    // TODO: 3/20/18 test class, remove when finished
-    @Override
-    public String toString() {
-        return "Deck{" +
-                "deck=" + Arrays.toString(deck) +
-                ", currentPos=" + currentPos +
-                '}';
-    }
 }

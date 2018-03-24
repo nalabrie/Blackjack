@@ -95,7 +95,6 @@ public class Wallet {
         }
 
         else {
-            // TODO: 3/23/18 add exception handling (maybe not needed?)
             money -= bet;
         }
 

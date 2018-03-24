@@ -141,14 +141,4 @@ public class Card {
             throw new InvalidSuitException();
         }
     }
-
-    // TODO: 3/21/18 remove when finished
-    @Override
-    public String toString() {
-        return "Card{" +
-                "value=" + value +
-                ", symbol='" + symbol + '\'' +
-                ", suit='" + suit + '\'' +
-                '}';
-    }
 }
