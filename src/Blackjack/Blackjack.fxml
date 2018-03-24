@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
@@ -58,8 +59,7 @@
                   <Label fx:id="playerTotalLabel" text="NA" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
-            <Label layoutX="277.0" layoutY="14.0" text="Dealer's Hand" />
-            <Label layoutX="278.0" layoutY="196.0" text="Player's Hand" />
+            <Label alignment="TOP_CENTER" layoutX="277.0" layoutY="6.0" text="Dealer's Hand" AnchorPane.leftAnchor="277.0" AnchorPane.rightAnchor="277.0" AnchorPane.topAnchor="6.0" />
             <GridPane alignment="CENTER" hgap="10.0" layoutX="220.0" layoutY="445.0" minHeight="30.0" minWidth="200.0" prefHeight="30.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
               <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
@@ -78,6 +78,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
+            <FlowPane fx:id="dealerFlowPane" alignment="TOP_CENTER" layoutY="23.0" prefHeight="160.0" prefWidth="640.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="23.0" />
       </children>
     </AnchorPane>
   </children>

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 
 /**
  * Controller to handle the state of the game and the GUI.
@@ -87,6 +88,12 @@ public class Controller {
      */
     @FXML
     private Label winnerLabel;
+
+    /**
+     * FlowPane to contain the images of the dealer's hand.
+     */
+    @FXML
+    private FlowPane dealerFlowPane;
 
     // member variables for players and their wallets
 
@@ -320,7 +327,7 @@ public class Controller {
         newGameButton.setVisible(true);
         nextRoundButton.setVisible(true);
 
-
+        // TODO: 3/24/18 display card images
         // TODO: 3/19/18 test bet handling
         // TODO: 3/19/18 implement a reset button to move to the next round
         // TODO: 3/23/18 track previous bet (might not have to), pull focus to bet box on new round, type in previous bet
@@ -386,5 +393,13 @@ public class Controller {
         // TODO: 3/23/18 handle differently because this is bad design
         // should never get this far
         return "ERROR";
+    }
+
+    /**
+     * Creates/updates the card images representing the dealer's hand inside the 'dealerFlowPane' container.
+     *
+     * @param showFirstCard Shows the dealer's first card when true, hides it when false.
+     */
+    private void displayDealerHand(boolean showFirstCard) {
     }
 }
