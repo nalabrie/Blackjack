@@ -76,10 +76,10 @@ public class Controller {
     private Button newGameButton;
 
     /**
-     * Button that moves the game to the next round and deals new hands.
+     * Button that moves the game to the next round.
      */
     @FXML
-    private Button dealButton;
+    private Button nextRoundButton;
 
     /**
      * Label that displays the winner at the end of each round.
@@ -140,7 +140,7 @@ public class Controller {
         // do not show 'new game', 'winnerLabel', and 'deal' buttons until thr round is over
         winnerLabel.setVisible(false);
         newGameButton.setVisible(false);
-        dealButton.setVisible(false);
+        nextRoundButton.setVisible(false);
     }
 
     // event handlers for GUI elements
@@ -169,6 +169,7 @@ public class Controller {
                 // set label to 11/1 to signify that the ace could be either 11 or 1
                 dealerTotalLabel.setText("11/1 + ??");
             }
+
             else {
                 // set label to the card value
                 dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(0).getValue()) + " + ??");
@@ -235,12 +236,29 @@ public class Controller {
         dealerTotalLabel.setText(String.valueOf(dealerHand.sum()));
 
         // check for winner
+        String winner = getWinner();
+
+        // handle bets
+
+        // if dealer wins
+        if (winner.equals("dealer")) {
+        }
+
+        // if player wins
+        if (winner.equals("player")) {
+        }
+
+        // if there is a tie
+        if (winner.equals("tie")) {
+        }
 
         // TODO: 3/19/18 handle bets
         // TODO: 3/19/18 implement a reset button to move to the next round
         // TODO: 3/19/18 implement a new game button that possibly calls the initialize() method (don't forget to force a new deck)
+        // TODO: 3/23/18 track previous bet (might not have to), pull focus to bet box on new round, type in previous bet
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
+        // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
     }
 
     @FXML
@@ -248,9 +266,58 @@ public class Controller {
     }
 
     @FXML
-    private void dealPressed(ActionEvent event) {
+    private void nextRoundPressed(ActionEvent event) {
     }
 
     // TODO: 3/23/18 remove section if nothing gets added to it
     // methods to handle game logic
+
+    /**
+     * Figure out who won and if there's a tie.
+     *
+     * @return String of the result: 'player', 'dealer', or 'tie'.
+     */
+    private String getWinner() {
+        // to avoid calling 'sum' method many times, store sums as local variables (more efficient)
+        int dealerSum = dealerHand.sum();
+        int playerSum = playerHand.sum();
+
+        // dealer busts
+        if (dealerSum > 21) {
+            return "player";
+        }
+
+        // player busts
+        if (playerSum > 21) {
+            return "dealer";
+        }
+
+        // dealer has bigger hand
+        if (dealerSum > playerSum) {
+            return "dealer";
+        }
+
+        // player has bigger hand
+        if (playerSum > dealerSum) {
+            return "player";
+        }
+
+        // tie must have occurred at this point
+
+        // if both dealer and player have 21 then a Blackjack hand (2 cards valued at 21) wins, otherwise it's a tie
+        if (playerSum == 21 && dealerSum == 21) {
+            // player has Blackjack, dealer does not
+            if (playerHand.getSize() == 2 && dealerHand.getSize() != 2) {
+                return "player";
+            }
+
+            // dealer has Blackjack, player does not
+            if (dealerHand.getSize() == 2 && playerHand.getSize() != 2) {
+                return "dealer";
+            }
+        }
+
+        // since no one has Blackjack and both hands aren't bigger than the other, a normal tie must have occurred
+        return "tie";
+    }
 }
