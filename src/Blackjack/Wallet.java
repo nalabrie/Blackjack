@@ -46,22 +46,24 @@ public class Wallet {
     }
 
     /**
-     * Adds to the player's current bet.
+     * Sets the bet.
      *
-     * @param bet Amount to be added to existing bet.
+     * @param bet Amount to set the bet to.
      * @throws InvalidBetException When bet is less than 1.
      * @throws BetTooBigException  When the bet exceeds amount of money available.
      */
     public void setBet(int bet) {
+        // bet cannot be below 2
         if (bet < 1) {
             throw new InvalidBetException();
         }
 
+        // bet cannot be bigger than the amount of money available
         if (bet > money) {
             throw new BetTooBigException();
         }
 
-        this.bet += bet;
+        this.bet = bet;
     }
 
     /**
@@ -93,6 +95,7 @@ public class Wallet {
         }
 
         else {
+            // TODO: 3/23/18 add exception handling (maybe not needed?)
             money -= bet;
         }
 
@@ -101,19 +104,13 @@ public class Wallet {
     }
 
     /**
-     * Method that adds or removes 150% of the bet from wallet depending on if a bet was won.
-     *
-     * @param winner Wins bet if true, loses bet if false.
+     * Method that adjusts bet to 150% of the original bet. Used when a player wins with Blackjack (2 cards valued at 21).
      */
-    public void hasWonBetWithBlackjack(boolean winner) {
+    public void adjustBetForBlackjack() {
         // change 'bet' to 150% of the original 'bet', using normal rounding
         bet = (int) Math.round(bet * 1.5);
-
-        // run the normal hasWonBet method with the new 'bet' amount
-        hasWonBet(winner);
     }
 
-    // TODO: 3/23/18 may not be needed, check when finished
     /**
      * Add money to the wallet.
      *
@@ -121,5 +118,27 @@ public class Wallet {
      */
     public void addMoney(int amount) {
         money += amount;
+    }
+
+    /**
+     * Subtract money from the wallet.
+     *
+     * @param amount How much money to subtract from the wallet.
+     * @throws NegativeMoneyException When the amount to subtract exceeds the amount available.
+     */
+    public void subtractMoney(int amount) {
+        // cannot remove more money than there is available
+        if (amount > money) {
+            throw new NegativeMoneyException();
+        }
+
+        money -= amount;
+    }
+
+    /**
+     * Reset the bet to 0. Usually used when there is a tie in Blackjack and the bet is returned.
+     */
+    public void resetBet() {
+        bet = 0;
     }
 }

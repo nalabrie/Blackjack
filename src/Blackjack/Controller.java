@@ -2,6 +2,7 @@ package Blackjack;
 
 import Blackjack.Exceptions.BetTooBigException;
 import Blackjack.Exceptions.InvalidBetException;
+import Blackjack.Exceptions.NegativeMoneyException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -242,6 +243,18 @@ public class Controller {
 
         // if player wins with Blackjack
         if (winner.equals("player blackjack")) {
+            // change bet to 150% of the bet since player has Blackjack
+            playerWallet.adjustBetForBlackjack();
+
+            // remove bet amount from dealer
+            try {
+                dealerWallet.subtractMoney(playerWallet.getBet());
+            } catch (NegativeMoneyException e) {
+                // TODO: 3/23/18 handle situation when dealer runs out of money and cannot pay the player
+            }
+
+            // process the player winning the bet
+            playerWallet.hasWonBet(true);
         }
 
         // if dealer wins
@@ -255,6 +268,8 @@ public class Controller {
         // if there is a tie
         if (winner.equals("tie")) {
         }
+
+        // update money amount labels
 
         // TODO: 3/19/18 handle bets
         // TODO: 3/19/18 implement a reset button to move to the next round
