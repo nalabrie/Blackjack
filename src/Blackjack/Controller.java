@@ -113,12 +113,13 @@ public class Controller {
     // initialize the state of the game
 
     /**
-     * Sets the starting state of the game when the application is opened. This is called once automatically.
+     * Sets the starting state of the game when the application is opened. This is called once automatically and whenever 'newGameButton' is pressed.
      */
     public void initialize() {
 
         // create all member variables
 
+        Hand.forceNewDeck();    // if 'new game' button was pressed, this ensures a new deck is created
         dealerHand = new Hand();
         playerHand = new Hand();
         dealerWallet = new Wallet(1000);    // dealer starts with extra money
@@ -138,10 +139,15 @@ public class Controller {
         hitButton.setDisable(true);
         stayButton.setDisable(true);
 
-        // do not show 'new game', 'winnerLabel', and 'deal' buttons until thr round is over
+        // do not show 'new game', 'winnerLabel', and 'next round' buttons until thr round is over
         winnerLabel.setVisible(false);
         newGameButton.setVisible(false);
         nextRoundButton.setVisible(false);
+
+        // make sure the bet area is enabled and focused
+        betButton.setDisable(false);
+        betTextField.setDisable(false);
+        betTextField.requestFocus();
     }
 
     // event handlers for GUI elements
@@ -259,29 +265,45 @@ public class Controller {
 
         // if dealer wins
         if (winner.equals("dealer")) {
+            // add bet to dealer's wallet
+            dealerWallet.addMoney(playerWallet.getBet());
+
+            // process the dealer winning the bet
+            playerWallet.hasWonBet(false);
         }
 
         // if player wins
         if (winner.equals("player")) {
+            // remove bet amount from dealer
+            try {
+                dealerWallet.subtractMoney(playerWallet.getBet());
+            } catch (NegativeMoneyException e) {
+                // TODO: 3/23/18 handle situation when dealer runs out of money and cannot pay the player
+            }
+
+            // process the player winning the bet
+            playerWallet.hasWonBet(true);
         }
 
         // if there is a tie
         if (winner.equals("tie")) {
+            // return bet to the player
+            playerWallet.resetBet();
         }
 
-        // update money amount labels
+        // update money and bet amount labels
 
-        // TODO: 3/19/18 handle bets
+        dealerMoneyLabel.setText(String.valueOf(dealerWallet.getMoney()));
+        playerMoneyLabel.setText(String.valueOf(playerWallet.getMoney()));
+        currentBetLabel.setText(String.valueOf(playerWallet.getBet()));
+
+        // TODO: 3/19/18 test bet handling
         // TODO: 3/19/18 implement a reset button to move to the next round
         // TODO: 3/19/18 implement a new game button that possibly calls the initialize() method (don't forget to force a new deck)
         // TODO: 3/23/18 track previous bet (might not have to), pull focus to bet box on new round, type in previous bet
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
         // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
-    }
-
-    @FXML
-    private void newGamePressed(ActionEvent event) {
     }
 
     @FXML

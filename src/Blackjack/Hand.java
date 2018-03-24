@@ -1,11 +1,6 @@
 package Blackjack;
 
-import Blackjack.Exceptions.DeckEmptyException;
-import Blackjack.Exceptions.HandBiggerThanDeckException;
-import Blackjack.Exceptions.HandFullException;
-import Blackjack.Exceptions.HandIndexOutOfBoundsException;
-
-import java.util.Arrays;
+import Blackjack.Exceptions.*;
 
 /**
  * Class that simulates a player's hand of cards during a card game.
@@ -41,6 +36,11 @@ public class Hand {
         // hand cannot be bigger than deck
         if (size > deck.getSize()) {
             throw new HandBiggerThanDeckException();
+        }
+
+        // hand must have at least 1 card
+        if (size < 1) {
+            throw new InvalidHandSizeException();
         }
 
         // hand can be as big as the deck
@@ -165,5 +165,12 @@ public class Hand {
         }
 
         return false;
+    }
+
+    /**
+     * Force a new deck to be created.
+     */
+    public static void forceNewDeck() {
+        deck = new Deck();
     }
 }

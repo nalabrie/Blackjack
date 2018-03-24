@@ -69,7 +69,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
               </rowConstraints>
                <children>
-                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGamePressed" prefHeight="27.0" prefWidth="90.0" text="New Game" />
+                  <Button mnemonicParsing="false" onAction="#initialize" prefHeight="27.0" prefWidth="90.0" text="New Game" />
                   <Button fx:id="nextRoundButton" mnemonicParsing="false" onAction="#nextRoundPressed" prefHeight="27.0" prefWidth="90.0" text="Next Round" GridPane.columnIndex="1" />
                </children>
             </GridPane>
