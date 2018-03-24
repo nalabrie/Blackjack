@@ -261,15 +261,27 @@ public class Controller {
 
             // process the player winning the bet
             playerWallet.hasWonBet(true);
+
+            // set winner message
+            winnerLabel.setText("Player wins with Blackjack!");
         }
 
         // if dealer wins
-        if (winner.equals("dealer")) {
+        if (winner.equals("dealer") || winner.equals("dealer blackjack")) {
             // add bet to dealer's wallet
             dealerWallet.addMoney(playerWallet.getBet());
 
             // process the dealer winning the bet
             playerWallet.hasWonBet(false);
+
+            // set winner message
+            if (winner.equals("dealer blackjack")) {
+                winnerLabel.setText("Dealer wins with Blackjack!");
+            }
+
+            else {
+                winnerLabel.setText("Dealer wins!");
+            }
         }
 
         // if player wins
@@ -283,12 +295,18 @@ public class Controller {
 
             // process the player winning the bet
             playerWallet.hasWonBet(true);
+
+            // set winner message
+            winnerLabel.setText("Player wins!");
         }
 
         // if there is a tie
         if (winner.equals("tie")) {
             // return bet to the player
             playerWallet.resetBet();
+
+            // set winner message
+            winnerLabel.setText("Tie!");
         }
 
         // update money and bet amount labels
@@ -297,9 +315,14 @@ public class Controller {
         playerMoneyLabel.setText(String.valueOf(playerWallet.getMoney()));
         currentBetLabel.setText(String.valueOf(playerWallet.getBet()));
 
+        // display winner, new game, and next round buttons
+        winnerLabel.setVisible(true);
+        newGameButton.setVisible(true);
+        nextRoundButton.setVisible(true);
+
+
         // TODO: 3/19/18 test bet handling
         // TODO: 3/19/18 implement a reset button to move to the next round
-        // TODO: 3/19/18 implement a new game button that possibly calls the initialize() method (don't forget to force a new deck)
         // TODO: 3/23/18 track previous bet (might not have to), pull focus to bet box on new round, type in previous bet
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
@@ -315,7 +338,7 @@ public class Controller {
     /**
      * Figure out who won and if there's a tie.
      *
-     * @return String of the winner. Returns one of the following: 'player blackjack', 'player', 'dealer', or 'tie'.
+     * @return String of the winner. Returns one of the following: 'dealer blackjack', 'player blackjack', 'player', 'dealer', or 'tie'.
      */
     private String getWinner() {
         // to avoid calling 'sum' method many times, store sums as local variables (more efficient)
@@ -328,7 +351,7 @@ public class Controller {
 
         // dealer has Blackjack and player does not
         if (dealerHasBlackjack && !playerHasBlackjack) {
-            return "dealer";
+            return "dealer blackjack";
         }
 
         // player has Blackjack and dealer does not
@@ -336,14 +359,14 @@ public class Controller {
             return "player blackjack";
         }
 
-        // dealer busts
-        if (dealerSum > 21) {
-            return "player";
-        }
-
         // player busts
         if (playerSum > 21) {
             return "dealer";
+        }
+
+        // dealer busts
+        if (dealerSum > 21) {
+            return "player";
         }
 
         // dealer has bigger hand

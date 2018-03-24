@@ -69,11 +69,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#initialize" prefHeight="27.0" prefWidth="90.0" text="New Game" />
                   <Button fx:id="nextRoundButton" mnemonicParsing="false" onAction="#nextRoundPressed" prefHeight="27.0" prefWidth="90.0" text="Next Round" GridPane.columnIndex="1" />
+                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#initialize" prefHeight="27.0" prefWidth="90.0" text="New Game" />
                </children>
             </GridPane>
-            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="221.0" layoutY="417.0" prefHeight="26.0" prefWidth="200.0" text="Label" textAlignment="CENTER" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="221.0" AnchorPane.rightAnchor="219.0">
+            <Label fx:id="winnerLabel" alignment="CENTER" layoutX="151.0" layoutY="417.0" prefHeight="26.0" prefWidth="338.0" text="Label" textAlignment="CENTER" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="151.0">
                <font>
                   <Font size="20.0" />
                </font>
