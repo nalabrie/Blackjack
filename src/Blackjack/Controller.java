@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 
 /**
  * Controller to handle the state of the game and the GUI.
@@ -75,6 +76,12 @@ public class Controller {
     private Label playerTotalLabel;
 
     /**
+     * Title above 'dealerFlowPane'.
+     */
+    @FXML
+    private Label dealerFlowPaneTitle;
+
+    /**
      * Button that starts a totally new game when pressed.
      */
     @FXML
@@ -97,6 +104,12 @@ public class Controller {
      */
     @FXML
     private FlowPane dealerFlowPane;
+
+    /**
+     * Title above 'playerFlowPane'.
+     */
+    @FXML
+    private Label playerFlowPaneTitle;
 
     /**
      * FlowPane to contain the images of the player's hand.
@@ -299,7 +312,8 @@ public class Controller {
             try {
                 dealerWallet.subtractMoney(playerWallet.getBet());
             } catch (NegativeMoneyException e) {
-                // TODO: 3/23/18 handle situation when dealer runs out of money and cannot pay the player
+                // ran out of money, end the game
+                gameOver();
             }
 
             // process the player winning the bet
@@ -333,7 +347,8 @@ public class Controller {
             try {
                 dealerWallet.subtractMoney(playerWallet.getBet());
             } catch (NegativeMoneyException e) {
-                // TODO: 3/23/18 handle situation when dealer runs out of money and cannot pay the player
+                // ran out of money, end the game
+                gameOver();
             }
 
             // process the player winning the bet
@@ -363,8 +378,13 @@ public class Controller {
         newGameButton.setVisible(true);
         nextRoundButton.setVisible(true);
 
-        // TODO: 3/19/18 test bet handling
-        // TODO: 3/19/18 implement a reset button to move to the next round
+        // if the player is out of money, end the game
+        if (playerWallet.getMoney() <= 0) {
+            gameOver();
+        }
+
+        // TODO: 3/19/18 test bet handling more
+        // TODO: 3/19/18 implement a next round button
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
         // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
@@ -493,5 +513,20 @@ public class Controller {
                 }
             }
         }
+    }
+
+    /**
+     * When one person is out of money, end the game.
+     */
+    private void gameOver() {
+        // make room in the scene by making unnecessary items invisible
+        playerFlowPaneTitle.setVisible(false);
+        dealerFlowPaneTitle.setVisible(false);
+        dealerFlowPane.setVisible(false);
+        playerFlowPane.setVisible(false);
+
+        // set hand totals to 'N/A' since the images are gone and it doesn't make sense to keep the totals too
+        dealerTotalLabel.setText("N/A");
+        playerTotalLabel.setText("N/A");
     }
 }

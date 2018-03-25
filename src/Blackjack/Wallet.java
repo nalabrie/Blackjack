@@ -2,6 +2,7 @@ package Blackjack;
 
 import Blackjack.Exceptions.BetTooBigException;
 import Blackjack.Exceptions.InvalidBetException;
+import Blackjack.Exceptions.NegativeAmountException;
 import Blackjack.Exceptions.NegativeMoneyException;
 
 /**
@@ -114,8 +115,13 @@ public class Wallet {
      * Add money to the wallet.
      *
      * @param amount How much money to add to the wallet.
+     * @throws NegativeAmountException When the amount parameter is negative.
      */
     public void addMoney(int amount) {
+        if (amount < 0) {
+            throw new NegativeAmountException();
+        }
+
         money += amount;
     }
 
@@ -124,11 +130,16 @@ public class Wallet {
      *
      * @param amount How much money to subtract from the wallet.
      * @throws NegativeMoneyException When the amount to subtract exceeds the amount available.
+     * @throws NegativeAmountException When the amount parameter is negative.
      */
     public void subtractMoney(int amount) {
         // cannot remove more money than there is available
         if (amount > money) {
             throw new NegativeMoneyException();
+        }
+
+        if (amount < 0) {
+            throw new NegativeAmountException();
         }
 
         money -= amount;
