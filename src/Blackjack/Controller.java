@@ -176,8 +176,8 @@ public class Controller {
 
         dealerHand = new Hand();
         playerHand = new Hand();
-        dealerWallet = new Wallet(1000);    // dealer starts with extra money
-        playerWallet = new Wallet();
+        dealerWallet = new Wallet(1);    // dealer starts with extra money
+        playerWallet = new Wallet(1);
         dealerImageView = new ImageView[12];
         playerImageView = new ImageView[12];
 
