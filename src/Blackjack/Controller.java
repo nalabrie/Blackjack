@@ -210,7 +210,7 @@ public class Controller {
     // event handlers for GUI elements
 
     @FXML
-    private void betPressed(ActionEvent event) {
+    private void betPressed() {
         try {
             // set the player bet to the value in the betTextField
             playerWallet.setBet(Integer.parseInt(betTextField.getText()));
@@ -247,9 +247,12 @@ public class Controller {
                 stayButton.fire();
             }
 
-            // show dealer and player hands
-            updateDealerFlowPane(true);
-            updatePlayerFlowPane();
+            else {
+                // show dealer and player hands
+                // note: this is inside an 'else' because it would be redundant to run otherwise
+                updateDealerFlowPane(true);
+                updatePlayerFlowPane();
+            }
         } catch (NumberFormatException | InvalidBetException e) {
             // invalid input (bet is not an integer or <= 0) so focus on the input error and try again
             betTextField.setText("Invalid bet");
@@ -264,7 +267,7 @@ public class Controller {
     }
 
     @FXML
-    private void hitPressed(ActionEvent event) {
+    private void hitPressed() {
         // hit player
         playerHand.hit();
 
@@ -286,7 +289,7 @@ public class Controller {
     }
 
     @FXML
-    private void stayPressed(ActionEvent event) {
+    private void stayPressed() {
         // disable all buttons and text fields until the round restarts
         betTextField.setDisable(true);
         betButton.setDisable(true);
@@ -405,8 +408,11 @@ public class Controller {
         // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
     }
 
+    /**
+     * Proceeds to the next round when 'next round' is pressed.
+     */
     @FXML
-    private void nextRoundPressed(ActionEvent event) {
+    private void nextRoundPressed() {
     }
 
     // methods to handle game logic
