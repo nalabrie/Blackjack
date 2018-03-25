@@ -81,6 +81,11 @@
             <FlowPane fx:id="dealerFlowPane" alignment="TOP_CENTER" layoutY="17.0" prefHeight="160.0" prefWidth="640.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="17.0" />
             <Label fx:id="playerFlowPaneTitle" alignment="TOP_CENTER" layoutX="278.0" layoutY="183.0" text="Player's Hand" underline="true" AnchorPane.leftAnchor="277.0" AnchorPane.rightAnchor="277.0" AnchorPane.topAnchor="183.0" />
             <FlowPane fx:id="playerFlowPane" alignment="TOP_CENTER" layoutY="200.0" prefHeight="160.0" prefWidth="640.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0" />
+            <Label fx:id="gameOverLabel" alignment="CENTER" layoutX="151.0" layoutY="75.0" prefHeight="292.0" prefWidth="338.0" text="game over placeholder" textAlignment="CENTER" textFill="RED" wrapText="true" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="75.0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
       </children>
     </AnchorPane>
   </children>

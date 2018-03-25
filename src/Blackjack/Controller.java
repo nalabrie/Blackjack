@@ -100,6 +100,12 @@ public class Controller {
     private Label winnerLabel;
 
     /**
+     * Label that appears when the game is over (someone is out of money).
+     */
+    @FXML
+    private Label gameOverLabel;
+
+    /**
      * FlowPane to contain the images of the dealer's hand.
      */
     @FXML
@@ -155,11 +161,16 @@ public class Controller {
      * Sets the starting state of the game when the application is opened. This is called once automatically and whenever 'newGameButton' is pressed.
      */
     public void initialize() {
-        // if new game is pressed, reset certain objects
+        // if new game is pressed, reset certain objects that may be messed up
 
-        Hand.forceNewDeck();    // ensures a new deck is created
+        Hand.forceNewDeck();                    // ensures a new deck is created
         dealerFlowPane.getChildren().clear();   // clear flow panes to remove card images
         playerFlowPane.getChildren().clear();   // clear flow panes to remove card images
+        playerFlowPaneTitle.setVisible(true);   // needs reset if pressing 'new game' after 'gameOver' runs
+        dealerFlowPaneTitle.setVisible(true);   // needs reset if pressing 'new game' after 'gameOver' runs
+        dealerFlowPane.setVisible(true);        // needs reset if pressing 'new game' after 'gameOver' runs
+        playerFlowPane.setVisible(true);        // needs reset if pressing 'new game' after 'gameOver' runs
+        nextRoundButton.setDisable(false);      // needs reset if pressing 'new game' after 'gameOver' runs
 
         // create all member variables
 
@@ -184,10 +195,11 @@ public class Controller {
         hitButton.setDisable(true);
         stayButton.setDisable(true);
 
-        // do not show 'new game', 'winnerLabel', and 'next round' buttons until thr round is over
+        // do not show certain buttons and labels until they are needed
         winnerLabel.setVisible(false);
         newGameButton.setVisible(false);
         nextRoundButton.setVisible(false);
+        gameOverLabel.setVisible(false);
 
         // make sure the bet area is enabled and focused
         betButton.setDisable(false);
@@ -313,6 +325,7 @@ public class Controller {
                 dealerWallet.subtractMoney(playerWallet.getBet());
             } catch (NegativeMoneyException e) {
                 // ran out of money, end the game
+                dealerWallet.resetMoney();
                 gameOver();
             }
 
@@ -348,6 +361,7 @@ public class Controller {
                 dealerWallet.subtractMoney(playerWallet.getBet());
             } catch (NegativeMoneyException e) {
                 // ran out of money, end the game
+                dealerWallet.resetMoney();
                 gameOver();
             }
 
@@ -378,8 +392,8 @@ public class Controller {
         newGameButton.setVisible(true);
         nextRoundButton.setVisible(true);
 
-        // if the player is out of money, end the game
-        if (playerWallet.getMoney() <= 0) {
+        // if the anyone is out of money, end the game
+        if (playerWallet.getMoney() <= 0 || dealerWallet.getMoney() <= 0) {
             gameOver();
         }
 
@@ -387,6 +401,7 @@ public class Controller {
         // TODO: 3/19/18 implement a next round button
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
+        // TODO: 3/24/18 optional: when someone has less money than the bet, the bet winner gets the same amount when they should only get what's really available from the other person.
         // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
     }
 
@@ -528,5 +543,23 @@ public class Controller {
         // set hand totals to 'N/A' since the images are gone and it doesn't make sense to keep the totals too
         dealerTotalLabel.setText("N/A");
         playerTotalLabel.setText("N/A");
+
+        // disable next round button
+        nextRoundButton.setDisable(true);
+
+        // display game over message
+
+        // if dealer is out of money
+        if (dealerWallet.getMoney() == 0) {
+            gameOverLabel.setText("GAME OVER\n\ndealer is out of money!");
+        }
+
+        // if player is out of money
+        if (playerWallet.getMoney() == 0) {
+            gameOverLabel.setText("GAME OVER\n\nplayer is out of money!");
+        }
+
+        // show game over message
+        gameOverLabel.setVisible(true);
     }
 }
