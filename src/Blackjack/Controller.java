@@ -201,17 +201,17 @@ public class Controller {
             hitButton.setDisable(false);
             stayButton.setDisable(false);
 
-            // update dealerTotalLabel to show the value of their first card
+            // update dealerTotalLabel to show the value of their second card
 
-            // if the dealer's first card is an ace
-            if (dealerHand.getCard(0).getSymbol().equals("A")) {
+            // if the dealer's second card is an ace
+            if (dealerHand.getCard(1).getSymbol().equals("A")) {
                 // set label to 11/1 to signify that the ace could be either 11 or 1
                 dealerTotalLabel.setText("11/1 + ??");
             }
 
             else {
                 // set label to the card value
-                dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(0).getValue()) + " + ??");
+                dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(1).getValue()) + " + ??");
             }
 
             // update playerTotalLabel
@@ -246,6 +246,9 @@ public class Controller {
         // update player's total
         playerTotalLabel.setText(String.valueOf(playerHand.sum()));
 
+        // update images for player's hand
+        updatePlayerFlowPane();
+
         // check if the player has busted or has Blackjack and 'stay'
         if (playerHand.sum() >= 21) {
             stayButton.fire();
@@ -277,6 +280,10 @@ public class Controller {
 
         // update dealerTotalLabel
         dealerTotalLabel.setText(String.valueOf(dealerHand.sum()));
+
+        // update images for both hands
+        updateDealerFlowPane(false);
+        updatePlayerFlowPane();
 
         // check for winner
         String winner = getWinner();
@@ -356,10 +363,8 @@ public class Controller {
         newGameButton.setVisible(true);
         nextRoundButton.setVisible(true);
 
-        // TODO: 3/24/18 display card images
         // TODO: 3/19/18 test bet handling
         // TODO: 3/19/18 implement a reset button to move to the next round
-        // TODO: 3/23/18 track previous bet (might not have to), pull focus to bet box on new round, type in previous bet
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
         // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
@@ -430,8 +435,8 @@ public class Controller {
      * @param showFirstCard Shows the first card when true, replaces it with a card back when false.
      */
     private void updateDealerFlowPane(boolean showFirstCard) {
+        // if 'showFirstCard' is true: first card shown is a card back rather than the actual first card
         if (showFirstCard) {
-            // first card shown is a card back rather than the actual first card
             Image back = new Image("file:cards/back.png");
             dealerImageView[0] = new ImageView();
             dealerImageView[0].setImage(back);
@@ -440,6 +445,12 @@ public class Controller {
             dealerImageView[0].setCache(true);
             dealerImageView[0].setFitHeight(160);
             dealerFlowPane.getChildren().add(dealerImageView[0]);
+        }
+
+        // replace flipped over card with real card by clearing variables to force the next loop to run entirely
+        else if (dealerImageView[0] != null) {
+            dealerFlowPane.getChildren().clear();
+            dealerImageView = new ImageView[12];
         }
 
         // add all cards in the dealer's hand to the FlowPane as images
@@ -459,21 +470,28 @@ public class Controller {
                 }
             }
         }
-
-        // TODO: 3/24/18 template. remove later.
-        //Image pic = new Image("file:cards/2clubs.png");
-        //ImageView iv1 = new ImageView();
-        //iv1.setImage(pic);
-        //iv1.setPreserveRatio(true);
-        //iv1.setSmooth(true);
-        //iv1.setCache(true);
-        //iv1.setFitHeight(160);
-        //dealerFlowPane.getChildren().add(iv1);
     }
 
     /**
      * Creates/updates the card images representing the player's hand inside the 'playerFlowPane' container.
      */
     private void updatePlayerFlowPane() {
+        // add all cards in the player's hand to the FlowPane as images
+        for (int i = 0; i < playerHand.getSize(); i++) {
+            // only add card when it hasn't been created yet (more efficient than overwriting the same image every time)
+            if (playerImageView[i] == null) {
+                Image card = new Image("file:cards/" + playerHand.getCard(i).getSymbol() + playerHand.getCard(i).getSuit() + ".png");
+                playerImageView[i] = new ImageView();
+                playerImageView[i].setImage(card);
+                playerImageView[i].setPreserveRatio(true);
+                playerImageView[i].setSmooth(true);
+                playerImageView[i].setCache(true);
+                playerImageView[i].setFitHeight(160);
+                playerFlowPane.getChildren().add(playerImageView[i]);
+                if (i != 0) {
+                    FlowPane.setMargin(playerImageView[i], new Insets(0, 0, 0, -75));
+                }
+            }
+        }
     }
 }
