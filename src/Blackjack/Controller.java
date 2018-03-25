@@ -5,9 +5,12 @@ import Blackjack.Exceptions.InvalidBetException;
 import Blackjack.Exceptions.NegativeMoneyException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 
 /**
@@ -95,6 +98,22 @@ public class Controller {
     @FXML
     private FlowPane dealerFlowPane;
 
+    /**
+     * FlowPane to contain the images of the player's hand.
+     */
+    @FXML
+    private FlowPane playerFlowPane;
+
+    /**
+     * Array of ImageView objects to store up to 12 images of the dealer's hand of cards.
+     */
+    private ImageView[] dealerImageView;
+
+    /**
+     * Array of ImageView objects to store up to 12 images of the player's hand of cards.
+     */
+    private ImageView[] playerImageView;
+
     // member variables for players and their wallets
 
     /**
@@ -123,14 +142,20 @@ public class Controller {
      * Sets the starting state of the game when the application is opened. This is called once automatically and whenever 'newGameButton' is pressed.
      */
     public void initialize() {
+        // if new game is pressed, reset certain objects
+
+        Hand.forceNewDeck();    // ensures a new deck is created
+        dealerFlowPane.getChildren().clear();   // clear flow panes to remove card images
+        playerFlowPane.getChildren().clear();   // clear flow panes to remove card images
 
         // create all member variables
 
-        Hand.forceNewDeck();    // if 'new game' button was pressed, this ensures a new deck is created
         dealerHand = new Hand();
         playerHand = new Hand();
         dealerWallet = new Wallet(1000);    // dealer starts with extra money
         playerWallet = new Wallet();
+        dealerImageView = new ImageView[12];
+        playerImageView = new ImageView[12];
 
         // set all labels to their starting values
 
@@ -196,6 +221,10 @@ public class Controller {
             if (dealerHand.sum() == 21 || playerHand.sum() == 21) {
                 stayButton.fire();
             }
+
+            // show dealer and player hands
+            updateDealerFlowPane(true);
+            updatePlayerFlowPane();
         } catch (NumberFormatException | InvalidBetException e) {
             // invalid input (bet is not an integer or <= 0) so focus on the input error and try again
             betTextField.setText("Invalid bet");
@@ -398,8 +427,53 @@ public class Controller {
     /**
      * Creates/updates the card images representing the dealer's hand inside the 'dealerFlowPane' container.
      *
-     * @param showFirstCard Shows the dealer's first card when true, hides it when false.
+     * @param showFirstCard Shows the first card when true, replaces it with a card back when false.
      */
-    private void displayDealerHand(boolean showFirstCard) {
+    private void updateDealerFlowPane(boolean showFirstCard) {
+        if (showFirstCard) {
+            // first card shown is a card back rather than the actual first card
+            Image back = new Image("file:cards/back.png");
+            dealerImageView[0] = new ImageView();
+            dealerImageView[0].setImage(back);
+            dealerImageView[0].setPreserveRatio(true);
+            dealerImageView[0].setSmooth(true);
+            dealerImageView[0].setCache(true);
+            dealerImageView[0].setFitHeight(160);
+            dealerFlowPane.getChildren().add(dealerImageView[0]);
+        }
+
+        // add all cards in the dealer's hand to the FlowPane as images
+        for (int i = 0; i < dealerHand.getSize(); i++) {
+            // only add card when it hasn't been created yet (more efficient than overwriting the same image every time)
+            if (dealerImageView[i] == null) {
+                Image card = new Image("file:cards/" + dealerHand.getCard(i).getSymbol() + dealerHand.getCard(i).getSuit() + ".png");
+                dealerImageView[i] = new ImageView();
+                dealerImageView[i].setImage(card);
+                dealerImageView[i].setPreserveRatio(true);
+                dealerImageView[i].setSmooth(true);
+                dealerImageView[i].setCache(true);
+                dealerImageView[i].setFitHeight(160);
+                dealerFlowPane.getChildren().add(dealerImageView[i]);
+                if (i != 0) {
+                    FlowPane.setMargin(dealerImageView[i], new Insets(0, 0, 0, -75));
+                }
+            }
+        }
+
+        // TODO: 3/24/18 template. remove later.
+        //Image pic = new Image("file:cards/2clubs.png");
+        //ImageView iv1 = new ImageView();
+        //iv1.setImage(pic);
+        //iv1.setPreserveRatio(true);
+        //iv1.setSmooth(true);
+        //iv1.setCache(true);
+        //iv1.setFitHeight(160);
+        //dealerFlowPane.getChildren().add(iv1);
+    }
+
+    /**
+     * Creates/updates the card images representing the player's hand inside the 'playerFlowPane' container.
+     */
+    private void updatePlayerFlowPane() {
     }
 }
