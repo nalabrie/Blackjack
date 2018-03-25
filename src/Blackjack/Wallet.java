@@ -129,7 +129,7 @@ public class Wallet {
      * Subtract money from the wallet.
      *
      * @param amount How much money to subtract from the wallet.
-     * @throws NegativeMoneyException When the amount to subtract exceeds the amount available.
+     * @throws NegativeMoneyException  When the amount to subtract exceeds the amount available.
      * @throws NegativeAmountException When the amount parameter is negative.
      */
     public void subtractMoney(int amount) {
@@ -146,9 +146,16 @@ public class Wallet {
     }
 
     /**
-     * Reset the bet to 0. Usually used when there is a tie in Blackjack and the bet is returned.
+     * Reset the bet to 0.
      */
     public void resetBet() {
         bet = 0;
+    }
+
+    /**
+     * Reset money to 0.
+     */
+    public void resetMoney() {
+        money = 0;
     }
 }
