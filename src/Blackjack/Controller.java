@@ -159,7 +159,6 @@ public class Controller {
      */
     public void initialize() {
         // if new game is pressed, reset certain objects that may be messed up
-
         Hand.forceNewDeck();                    // ensures a new deck is created
         dealerFlowPane.getChildren().clear();   // clear flow panes to remove card images
         playerFlowPane.getChildren().clear();   // clear flow panes to remove card images
@@ -170,7 +169,6 @@ public class Controller {
         nextRoundButton.setDisable(false);      // needs reset if pressing 'new game' after 'gameOver' runs
 
         // create all member variables
-
         dealerHand = new Hand();
         playerHand = new Hand();
         dealerWallet = new Wallet(1000);    // dealer starts with extra money
@@ -179,7 +177,6 @@ public class Controller {
         playerImageView = new ImageView[12];
 
         // set all labels to their starting values
-
         dealerMoneyLabel.setText("$" + String.valueOf(dealerWallet.getMoney()));
         playerMoneyLabel.setText("$" + String.valueOf(playerWallet.getMoney()));
         currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
@@ -305,8 +302,14 @@ public class Controller {
         hitButton.setDisable(true);
         stayButton.setDisable(true);
 
-        // dealer only hits if the player hasn't busted yet
-        if (playerHand.sum() <= 21) {
+        // to avoid calling 'sum' method many times, store sums as local variables (more efficient)
+        int playerSum = playerHand.sum();
+
+        // check if the player has a natural Blackjack (2 cards valued at 21)
+        boolean playerHasBlackjack = playerHand.getSize() == 2 && playerSum == 21;
+
+        // dealer only hits if the player hasn't busted yet and doesn't have Blackjack
+        if (playerSum <= 21 && !playerHasBlackjack) {
             // dealer hits repeatedly, stands on hard a 17
             while (dealerHand.sum() < 17) {
                 dealerHand.hit();
@@ -336,7 +339,6 @@ public class Controller {
             playerWallet.adjustBetForBlackjack();
 
             // transfer bet from dealer to player
-            // TODO: 3/26/18 might need a try/catch
             playerWallet.modifyMoney(dealerWallet.transferMoney(playerWallet.getBet()));
 
             // reset player's bet
@@ -349,7 +351,6 @@ public class Controller {
         // if dealer wins
         if (winner.equals("dealer") || winner.equals("dealer blackjack")) {
             // transfer bet from player to dealer
-            // TODO: 3/26/18 might need a try/catch
             dealerWallet.modifyMoney(playerWallet.transferMoney(playerWallet.getBet()));
 
             // reset player's bet
@@ -388,9 +389,9 @@ public class Controller {
 
         // update money and bet amount labels
 
-        dealerMoneyLabel.setText(String.valueOf(dealerWallet.getMoney()));
-        playerMoneyLabel.setText(String.valueOf(playerWallet.getMoney()));
-        currentBetLabel.setText(String.valueOf(playerWallet.getBet()));
+        dealerMoneyLabel.setText("$" + String.valueOf(dealerWallet.getMoney()));
+        playerMoneyLabel.setText("$" + String.valueOf(playerWallet.getMoney()));
+        currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
 
         // display winner, new game, and next round buttons
         winnerLabel.setVisible(true);
@@ -402,9 +403,6 @@ public class Controller {
             gameOver();
         }
 
-        // TODO: 3/19/18 test bet handling more
-        // TODO: 3/19/18 implement a next round button
-        // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
         // TODO: 3/24/18 optional: when someone has less money than the bet, the bet winner gets the same amount when they should only get what's really available from the other person.
         // TODO: 3/25/18 optional: dealer doesn't play if player busts
@@ -416,6 +414,39 @@ public class Controller {
      */
     @FXML
     private void nextRoundPressed() {
+        // reset certain objects that may be messed up
+        dealerFlowPane.getChildren().clear();   // clear flow panes to remove card images
+        playerFlowPane.getChildren().clear();   // clear flow panes to remove card images
+        dealerImageView = new ImageView[12];    // make new ImageView arrays so new cards can be added
+        playerImageView = new ImageView[12];    // make new ImageView arrays so new cards can be added
+
+        // deal new hands
+        dealerHand = new Hand();
+        playerHand = new Hand();
+
+        // set all labels to their starting values
+        dealerMoneyLabel.setText("$" + String.valueOf(dealerWallet.getMoney()));
+        playerMoneyLabel.setText("$" + String.valueOf(playerWallet.getMoney()));
+        currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
+
+        // do not show either dealer or player totals until a bet is made
+        dealerTotalLabel.setText("N/A");
+        playerTotalLabel.setText("N/A");
+
+        // disable hit and stay buttons until a bet is made
+        hitButton.setDisable(true);
+        stayButton.setDisable(true);
+
+        // do not show certain buttons and labels until they are needed
+        winnerLabel.setVisible(false);
+        newGameButton.setVisible(false);
+        nextRoundButton.setVisible(false);
+        gameOverLabel.setVisible(false);
+
+        // make sure the bet area is enabled and focused
+        betButton.setDisable(false);
+        betTextField.setDisable(false);
+        betTextField.requestFocus();
     }
 
     // methods to handle game logic
