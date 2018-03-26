@@ -86,24 +86,6 @@ public class Wallet {
     }
 
     /**
-     * Method that adds or removes the bet from wallet depending on if a bet was won.
-     *
-     * @param winner Wins bet if true, loses bet if false.
-     */
-    public void hasWonBet(boolean winner) {
-        if (winner) {
-            money += bet;
-        }
-
-        else {
-            money -= bet;
-        }
-
-        // reset bet
-        bet = 0;
-    }
-
-    /**
      * Method that adjusts bet to 150% of the original bet. Used when a player wins with Blackjack (2 cards valued at 21).
      */
     public void adjustBetForBlackjack() {
@@ -112,37 +94,43 @@ public class Wallet {
     }
 
     /**
-     * Add money to the wallet.
+     * Add or remove money from the wallet.
      *
-     * @param amount How much money to add to the wallet.
-     * @throws NegativeAmountException When the amount parameter is negative.
+     * @param amount Amount to be added/removed. Can not be bigger than the amount of money available.
+     * @throws NegativeMoneyException When amount to subtract exceeds the amount available.
      */
-    public void addMoney(int amount) {
-        if (amount < 0) {
-            throw new NegativeAmountException();
+    public void modifyMoney(int amount) {
+        // cannot remove more money than there is available
+        if (money + amount < 0) {
+            throw new NegativeMoneyException();
         }
 
+        // add or remove 'amount' from the wallet
         money += amount;
     }
 
     /**
-     * Subtract money from the wallet.
+     * Transfer money out of a wallet.
      *
-     * @param amount How much money to subtract from the wallet.
-     * @throws NegativeMoneyException  When the amount to subtract exceeds the amount available.
-     * @throws NegativeAmountException When the amount parameter is negative.
+     * @param amount Amount to attempt to remove. If the amount is too big, the rest of the money in the wallet will be taken.
+     * @return Amount taken from the wallet.
+     * @throws NegativeAmountException When the 'amount' parameter is negative.
      */
-    public void subtractMoney(int amount) {
-        // cannot remove more money than there is available
-        if (amount > money) {
-            throw new NegativeMoneyException();
-        }
-
+    public int transferMoney(int amount) {
+        // amount cannot be negative
         if (amount < 0) {
             throw new NegativeAmountException();
         }
 
+        // if amount is more than the money available, change amount to equal money
+        if (amount > money) {
+            amount = money;
+        }
+
+        // subtract amount from money
         money -= amount;
+
+        return amount;
     }
 
     /**
@@ -150,12 +138,5 @@ public class Wallet {
      */
     public void resetBet() {
         bet = 0;
-    }
-
-    /**
-     * Reset money to 0.
-     */
-    public void resetMoney() {
-        money = 0;
     }
 }

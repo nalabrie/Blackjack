@@ -2,8 +2,6 @@ package Blackjack;
 
 import Blackjack.Exceptions.BetTooBigException;
 import Blackjack.Exceptions.InvalidBetException;
-import Blackjack.Exceptions.NegativeMoneyException;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -12,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 
 /**
  * Controller to handle the state of the game and the GUI.
@@ -215,6 +212,11 @@ public class Controller {
             // set the player bet to the value in the betTextField
             playerWallet.setBet(Integer.parseInt(betTextField.getText()));
 
+            // make sure the bet isn't bigger than the amount of money the dealer has
+            if (playerWallet.getBet() > dealerWallet.getMoney()) {
+                throw new BetTooBigException();
+            }
+
             // update currentBetLabel
             currentBetLabel.setText("$" + String.valueOf(playerWallet.getBet()));
 
@@ -239,11 +241,15 @@ public class Controller {
                 dealerTotalLabel.setText(String.valueOf(dealerHand.getCard(1).getValue()) + " + ??");
             }
 
+            // call 'Sum' methods now (more efficient than calling multiple times)
+            int playerSum = playerHand.sum();
+            int dealerSum = dealerHand.sum();
+
             // update playerTotalLabel
-            playerTotalLabel.setText(String.valueOf(playerHand.sum()));
+            playerTotalLabel.setText(String.valueOf(playerSum));
 
             // if the dealer or player were dealt Blackjack
-            if (dealerHand.sum() == 21 || playerHand.sum() == 21) {
+            if (dealerSum == 21 || playerSum == 21) {
                 stayButton.fire();
             }
 
@@ -259,7 +265,7 @@ public class Controller {
             betTextField.selectAll();
             betTextField.requestFocus();
         } catch (BetTooBigException e) {
-            // invalid input (bet is > player money) so focus on the input error and try again
+            // invalid input (bet is > player or dealer money) so focus on the input error and try again
             betTextField.setText("Bet too big");
             betTextField.selectAll();
             betTextField.requestFocus();
@@ -271,14 +277,17 @@ public class Controller {
         // hit player
         playerHand.hit();
 
+        // call 'Sum' method now (more efficient than calling multiple times)
+        int playerSum = playerHand.sum();
+
         // update player's total
-        playerTotalLabel.setText(String.valueOf(playerHand.sum()));
+        playerTotalLabel.setText(String.valueOf(playerSum));
 
         // update images for player's hand
         updatePlayerFlowPane();
 
         // check if the player has busted or has Blackjack and 'stay'
-        if (playerHand.sum() >= 21) {
+        if (playerSum >= 21) {
             stayButton.fire();
         }
 
@@ -296,13 +305,16 @@ public class Controller {
         hitButton.setDisable(true);
         stayButton.setDisable(true);
 
-        // dealer hits repeatedly, stands on hard a 17
-        while (dealerHand.sum() < 17) {
-            dealerHand.hit();
-
-            // if dealer has a soft 17, hit again
-            if (dealerHand.sum() == 17 && dealerHand.hasAce()) {
+        // dealer only hits if the player hasn't busted yet
+        if (playerHand.sum() <= 21) {
+            // dealer hits repeatedly, stands on hard a 17
+            while (dealerHand.sum() < 17) {
                 dealerHand.hit();
+
+                // if dealer has a soft 17, hit again
+                if (dealerHand.sum() == 17 && dealerHand.hasAce()) {
+                    dealerHand.hit();
+                }
             }
         }
 
@@ -323,17 +335,12 @@ public class Controller {
             // change bet to 150% of the bet since player has Blackjack
             playerWallet.adjustBetForBlackjack();
 
-            // remove bet amount from dealer
-            try {
-                dealerWallet.subtractMoney(playerWallet.getBet());
-            } catch (NegativeMoneyException e) {
-                // ran out of money, end the game
-                dealerWallet.resetMoney();
-                gameOver();
-            }
+            // transfer bet from dealer to player
+            // TODO: 3/26/18 might need a try/catch
+            playerWallet.modifyMoney(dealerWallet.transferMoney(playerWallet.getBet()));
 
-            // process the player winning the bet
-            playerWallet.hasWonBet(true);
+            // reset player's bet
+            playerWallet.resetBet();
 
             // set winner message
             winnerLabel.setText("Player wins with Blackjack!");
@@ -341,11 +348,12 @@ public class Controller {
 
         // if dealer wins
         if (winner.equals("dealer") || winner.equals("dealer blackjack")) {
-            // add bet to dealer's wallet
-            dealerWallet.addMoney(playerWallet.getBet());
+            // transfer bet from player to dealer
+            // TODO: 3/26/18 might need a try/catch
+            dealerWallet.modifyMoney(playerWallet.transferMoney(playerWallet.getBet()));
 
-            // process the dealer winning the bet
-            playerWallet.hasWonBet(false);
+            // reset player's bet
+            playerWallet.resetBet();
 
             // set winner message
             if (winner.equals("dealer blackjack")) {
@@ -359,17 +367,11 @@ public class Controller {
 
         // if player wins
         if (winner.equals("player")) {
-            // remove bet amount from dealer
-            try {
-                dealerWallet.subtractMoney(playerWallet.getBet());
-            } catch (NegativeMoneyException e) {
-                // ran out of money, end the game
-                dealerWallet.resetMoney();
-                gameOver();
-            }
+            // transfer bet from dealer to player
+            playerWallet.modifyMoney(dealerWallet.transferMoney(playerWallet.getBet()));
 
-            // process the player winning the bet
-            playerWallet.hasWonBet(true);
+            // reset player's bet
+            playerWallet.resetBet();
 
             // set winner message
             winnerLabel.setText("Player wins!");
@@ -405,7 +407,8 @@ public class Controller {
         // TODO: 3/19/18 handle running out of money
         // TODO: 3/23/18 finish documentation of methods
         // TODO: 3/24/18 optional: when someone has less money than the bet, the bet winner gets the same amount when they should only get what's really available from the other person.
-        // TODO: 3/23/18 optional: improve efficiency by calculating sum once and storing it in a member variable
+        // TODO: 3/25/18 optional: dealer doesn't play if player busts
+        // TODO: 3/26/18 optional: when player wins, place a lot of money pictures all over the screen in random spots
     }
 
     /**
