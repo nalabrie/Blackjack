@@ -26,6 +26,7 @@ public class Hand {
      *
      * @param size The size of the hand to start with.
      * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck.
+     * @throws InvalidHandSizeException    When the size parameter isn't at least 1.
      */
     public Hand(int size) {
         // create a new shuffled deck if one isn't created yet
@@ -65,8 +66,6 @@ public class Hand {
 
     /**
      * Default constructor which draws 2 cards (default starting Blackjack hand).
-     *
-     * @throws HandBiggerThanDeckException When the amount of cards in the hand is bigger than the whole deck.
      */
     public Hand() {
         this(2);

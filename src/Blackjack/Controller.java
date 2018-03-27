@@ -201,8 +201,11 @@ public class Controller {
         betTextField.requestFocus();
     }
 
-    // event handlers for GUI elements
+    // methods to handle GUI elements
 
+    /**
+     * Runs when the bet button is pressed. Gets the bet that was entered in the bet text field and deals the dealer and player cards.
+     */
     @FXML
     private void betPressed() {
         try {
@@ -269,6 +272,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Runs when hit button is pressed. Hits the player with a card.
+     */
     @FXML
     private void hitPressed() {
         // hit player
@@ -294,6 +300,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Runs when the stay button is pressed. 'Stays', processes the dealer's turn, figures out who won, and settles bets.
+     */
     @FXML
     private void stayPressed() {
         // disable all buttons and text fields until the round restarts
@@ -402,15 +411,10 @@ public class Controller {
         if (playerWallet.getMoney() <= 0 || dealerWallet.getMoney() <= 0) {
             gameOver();
         }
-
-        // TODO: 3/23/18 finish documentation of methods
-        // TODO: 3/24/18 optional: when someone has less money than the bet, the bet winner gets the same amount when they should only get what's really available from the other person.
-        // TODO: 3/25/18 optional: dealer doesn't play if player busts
-        // TODO: 3/26/18 optional: when player wins, place a lot of money pictures all over the screen in random spots
     }
 
     /**
-     * Proceeds to the next round when 'next round' is pressed.
+     * Proceeds to the next round when next round button is pressed.
      */
     @FXML
     private void nextRoundPressed() {
@@ -499,7 +503,7 @@ public class Controller {
             return "tie";
         }
 
-        // TODO: 3/23/18 handle differently because this is bad design
+        // TODO: 3/23/18 consider handling differently because this seems like bad design
         // should never get this far
         return "ERROR";
     }
