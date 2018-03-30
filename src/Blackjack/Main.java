@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  */
 
 /**
- * Main method which starts up the Blackjack GUI application.
+ * Main class which sets up the scene and starts up the Blackjack GUI application.
  */
 public class Main extends Application {
 
