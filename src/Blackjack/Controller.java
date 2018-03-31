@@ -503,7 +503,6 @@ public class Controller {
             return "tie";
         }
 
-        // TODO: 3/23/18 consider handling differently because this seems like bad design
         // should never get this far
         return "ERROR";
     }
